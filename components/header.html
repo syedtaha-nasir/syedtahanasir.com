@@ -67,6 +67,7 @@ body { font-family: var(--font-family); background: var(--bg); color: var(--text
 /* Desktop: dropdown follows pointer. The dropdown is a child of the trigger, so the
    hover area includes both the top navigation item and its dropdown. */
 @media (min-width:993px) {
+ /* Desktop dropdown is CSS-hover controlled only. */
  .mega-trigger:hover .mega-dropdown {
    opacity:1 !important;
    visibility:visible !important;
@@ -85,18 +86,6 @@ body { font-family: var(--font-family); background: var(--bg); color: var(--text
  }
  .mega-trigger:hover .trigger-label::after {
    transform:translateX(-50%) scaleX(1) !important;
- }
- .mega-trigger.is-open .mega-dropdown {
-   opacity:0 !important;
-   visibility:hidden !important;
-   pointer-events:none !important;
-   transform:translateX(-50%) translateY(12px) !important;
- }
- .mega-trigger.is-open:hover .mega-dropdown {
-   opacity:1 !important;
-   visibility:visible !important;
-   pointer-events:auto !important;
-   transform:translateX(-50%) translateY(0) !important;
  }
 }
 
@@ -373,21 +362,7 @@ document.addEventListener('DOMContentLoaded', function () {
         backBtn.innerHTML = '← Back to Main Menu';
         if (inner) inner.insertBefore(backBtn, inner.firstChild);
 
-        /* Desktop: hover only. The dropdown is inside the trigger, so leaving
-           the trigger means the pointer is no longer on the navigation item
-           or its dropdown. */
-        trigger.addEventListener('mouseenter', function () {
-            if (!mobileQuery.matches) {
-                closeDesktopMenus();
-                trigger.classList.add('is-open');
-            }
-        });
-
-        trigger.addEventListener('mouseleave', function () {
-            if (!mobileQuery.matches) {
-                trigger.classList.remove('is-open');
-            }
-        });
+        /* Desktop dropdowns are controlled only by CSS :hover. */
 
         /* Mobile: tap a navigation item to open its submenu. */
         label.addEventListener('click', function (event) {
