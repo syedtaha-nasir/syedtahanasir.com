@@ -40,10 +40,6 @@ html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
 body { font-family: var(--font-family); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100%; }
 /* ─── HEADER INJECTION STYLES ─── */
 .mega-trigger { position:relative; }
-.mega-trigger.is-open .trigger-label { color:var(--teal) !important; background:var(--teal-light) !important; box-shadow:0 0 0 6px var(--teal-glow) !important; }
-.mega-trigger.is-open .trigger-chevron { opacity:1 !important; transform:rotate(180deg) !important; color:var(--teal) !important; }
-.mega-trigger.is-open .trigger-label::after { transform:translateX(-50%) scaleX(1) !important; }
-.mega-trigger.is-open .mega-dropdown { opacity:1 !important; visibility:visible !important; pointer-events:auto !important; transform:translateX(-50%) translateY(0) !important; }
 .drop-link:hover { background:var(--teal-light); color:var(--teal); padding-left:24px !important; box-shadow:var(--shadow-sm); }
 .drop-link:hover::before { transform:translateY(-50%) scaleY(1) !important; }
 .drop-link:hover svg { stroke:var(--teal-dark) !important; transform:scale(1.1) !important; }
@@ -67,6 +63,42 @@ body { font-family: var(--font-family); background: var(--bg); color: var(--text
 .hamburger-btn.active span:nth-child(2) { opacity:0; }
 .hamburger-btn.active span:nth-child(3) { transform:translateY(-9.5px) rotate(-45deg); }
 .mobile-back-btn { display:none; }
+
+/* Desktop: dropdown follows pointer. The dropdown is a child of the trigger, so the
+   hover area includes both the top navigation item and its dropdown. */
+@media (min-width:993px) {
+ .mega-trigger:hover .mega-dropdown {
+   opacity:1 !important;
+   visibility:visible !important;
+   pointer-events:auto !important;
+   transform:translateX(-50%) translateY(0) !important;
+ }
+ .mega-trigger:hover .trigger-label {
+   color:var(--teal) !important;
+   background:var(--teal-light) !important;
+   box-shadow:0 0 0 6px var(--teal-glow) !important;
+ }
+ .mega-trigger:hover .trigger-chevron {
+   opacity:1 !important;
+   transform:rotate(180deg) !important;
+   color:var(--teal) !important;
+ }
+ .mega-trigger:hover .trigger-label::after {
+   transform:translateX(-50%) scaleX(1) !important;
+ }
+ .mega-trigger.is-open .mega-dropdown {
+   opacity:0 !important;
+   visibility:hidden !important;
+   pointer-events:none !important;
+   transform:translateX(-50%) translateY(12px) !important;
+ }
+ .mega-trigger.is-open:hover .mega-dropdown {
+   opacity:1 !important;
+   visibility:visible !important;
+   pointer-events:auto !important;
+   transform:translateX(-50%) translateY(0) !important;
+ }
+}
 
 @media (max-width:992px) {
  .nav-container { justify-content:space-between !important; padding:0 20px !important; gap:12px !important; }
@@ -266,7 +298,7 @@ Services
 </header>
 <!-- Spacer to prevent hero overlap -->
 <div class="header-spacer" style="height:80px;"></div>
-<!-- ─── HEADER JAVASCRIPT (MOBILE MENU SLIDER LOGIC) ─── -->
+<!-- ─── HEADER JAVASCRIPT ─── -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
     const navContainer = document.querySelector('.nav-container');
@@ -274,9 +306,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const triggers = Array.from(document.querySelectorAll('.mega-trigger'));
     const header = document.querySelector('.nav-wrapper');
     const spacer = document.querySelector('.header-spacer');
+
     if (!navContainer || !mainNav || !triggers.length) return;
 
     const mobileQuery = window.matchMedia('(max-width: 992px)');
+
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger-btn';
     hamburger.type = 'button';
@@ -285,33 +319,52 @@ document.addEventListener('DOMContentLoaded', function () {
     hamburger.innerHTML = '<span></span><span></span><span></span>';
     navContainer.appendChild(hamburger);
 
-    const closeSubmenus = () => {
-        triggers.forEach(t => t.classList.remove('is-open'));
+    function closeDesktopMenus() {
+        triggers.forEach(function (trigger) {
+            trigger.classList.remove('is-open');
+        });
+    }
+
+    function closeMobileSubmenu() {
+        triggers.forEach(function (trigger) {
+            trigger.classList.remove('is-open');
+        });
         mainNav.classList.remove('is-submenu-open');
-    };
-    const closeMenu = () => {
-        closeSubmenus();
+    }
+
+    function closeMobileMenu() {
+        closeMobileSubmenu();
         mainNav.classList.remove('open');
         hamburger.classList.remove('active');
         hamburger.setAttribute('aria-expanded', 'false');
         document.body.classList.remove('header-menu-open');
-    };
-    const openMenu = () => {
+    }
+
+    function openMobileMenu() {
         mainNav.classList.add('open');
         hamburger.classList.add('active');
         hamburger.setAttribute('aria-expanded', 'true');
         document.body.classList.add('header-menu-open');
-    };
+    }
 
-    hamburger.addEventListener('click', function(e) {
-        e.preventDefault(); e.stopPropagation();
-        if (mainNav.classList.contains('open')) closeMenu(); else openMenu();
+    hamburger.addEventListener('click', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (mobileQuery.matches) {
+            if (mainNav.classList.contains('open')) {
+                closeMobileMenu();
+            } else {
+                openMobileMenu();
+            }
+        }
     });
 
-    triggers.forEach(trigger => {
+    triggers.forEach(function (trigger) {
         const label = trigger.querySelector('.trigger-label');
         const dropdown = trigger.querySelector('.mega-dropdown');
         const inner = dropdown ? dropdown.querySelector('.mega-inner') : null;
+
         if (!label || !dropdown) return;
 
         const backBtn = document.createElement('button');
@@ -320,17 +373,36 @@ document.addEventListener('DOMContentLoaded', function () {
         backBtn.innerHTML = '← Back to Main Menu';
         if (inner) inner.insertBefore(backBtn, inner.firstChild);
 
-        label.addEventListener('click', function(e) {
-            e.preventDefault(); e.stopPropagation();
+        /* Desktop: hover only. The dropdown is inside the trigger, so leaving
+           the trigger means the pointer is no longer on the navigation item
+           or its dropdown. */
+        trigger.addEventListener('mouseenter', function () {
             if (!mobileQuery.matches) {
-                const wasOpen = trigger.classList.contains('is-open');
-                closeSubmenus();
-                if (!wasOpen) trigger.classList.add('is-open');
-                return;
+                closeDesktopMenus();
+                trigger.classList.add('is-open');
             }
-            if (!mainNav.classList.contains('open')) openMenu();
+        });
+
+        trigger.addEventListener('mouseleave', function () {
+            if (!mobileQuery.matches) {
+                trigger.classList.remove('is-open');
+            }
+        });
+
+        /* Mobile: tap a navigation item to open its submenu. */
+        label.addEventListener('click', function (event) {
+            if (!mobileQuery.matches) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            if (!mainNav.classList.contains('open')) {
+                openMobileMenu();
+            }
+
             const wasOpen = trigger.classList.contains('is-open');
-            closeSubmenus();
+            closeMobileSubmenu();
+
             if (!wasOpen) {
                 trigger.classList.add('is-open');
                 mainNav.classList.add('is-submenu-open');
@@ -338,28 +410,48 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        backBtn.addEventListener('click', function(e) {
-            e.preventDefault(); e.stopPropagation();
-            closeSubmenus(); mainNav.scrollTop = 0;
+        backBtn.addEventListener('click', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            closeMobileSubmenu();
+            mainNav.scrollTop = 0;
         });
     });
 
-    mainNav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function() {
-            if (mobileQuery.matches) closeMenu(); else closeSubmenus();
+    mainNav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            if (mobileQuery.matches) {
+                closeMobileMenu();
+            }
         });
     });
 
-    document.addEventListener('click', function(e) {
-        if (!mainNav.contains(e.target) && !hamburger.contains(e.target)) closeMenu();
+    document.addEventListener('click', function (event) {
+        if (mobileQuery.matches) {
+            if (!mainNav.contains(event.target) && !hamburger.contains(event.target)) {
+                closeMobileMenu();
+            }
+        }
     });
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeMenu();
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            if (mobileQuery.matches) closeMobileMenu();
+        }
     });
-    const syncHeaderHeight = () => {
-        if (header && spacer) spacer.style.height = header.offsetHeight + 'px';
-    };
-    window.addEventListener('resize', () => { closeMenu(); syncHeaderHeight(); });
+
+    function syncHeaderHeight() {
+        if (header && spacer) {
+            spacer.style.height = header.offsetHeight + 'px';
+        }
+    }
+
+    window.addEventListener('resize', function () {
+        closeDesktopMenus();
+        closeMobileMenu();
+        syncHeaderHeight();
+    });
+
     syncHeaderHeight();
 });
 </script>
