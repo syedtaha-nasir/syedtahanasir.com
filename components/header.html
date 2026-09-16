@@ -40,13 +40,9 @@ html { scroll-behavior: smooth; overflow-x: hidden; max-width: 100%; }
 body { font-family: var(--font-family); background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; overflow-x: hidden; max-width: 100%; }
 /* ─── HEADER INJECTION STYLES ─── */
 .mega-trigger { position:relative; }
-.mega-trigger:hover .trigger-label,
 .mega-trigger.is-open .trigger-label { color:var(--teal) !important; background:var(--teal-light) !important; box-shadow:0 0 0 6px var(--teal-glow) !important; }
-.mega-trigger:hover .trigger-chevron,
 .mega-trigger.is-open .trigger-chevron { opacity:1 !important; transform:rotate(180deg) !important; color:var(--teal) !important; }
-.mega-trigger:hover .trigger-label::after,
 .mega-trigger.is-open .trigger-label::after { transform:translateX(-50%) scaleX(1) !important; }
-.mega-trigger:hover .mega-dropdown,
 .mega-trigger.is-open .mega-dropdown { opacity:1 !important; visibility:visible !important; pointer-events:auto !important; transform:translateX(-50%) translateY(0) !important; }
 .drop-link:hover { background:var(--teal-light); color:var(--teal); padding-left:24px !important; box-shadow:var(--shadow-sm); }
 .drop-link:hover::before { transform:translateY(-50%) scaleY(1) !important; }
@@ -80,8 +76,7 @@ body { font-family: var(--font-family); background: var(--bg); color: var(--text
  .cta-button { margin-left:auto !important; padding:12px 16px !important; font-size:12px !important; }
  .mega-trigger { width:100% !important; height:auto !important; display:block !important; padding:0 !important; border-bottom:1px solid var(--border); }
  .mega-trigger .trigger-label { width:100% !important; display:flex !important; justify-content:space-between !important; align-items:center !important; padding:18px 24px !important; border-radius:0 !important; font-size:16px !important; cursor:pointer; box-shadow:none !important; color:var(--text) !important; }
- .mega-trigger:hover .trigger-label,.mega-trigger.is-open .trigger-label { background:transparent !important; box-shadow:none !important; color:var(--text) !important; }
- .mega-trigger:hover .mega-dropdown { opacity:0 !important; visibility:hidden !important; pointer-events:none !important; display:none !important; }
+ .mega-trigger.is-open .trigger-label { background:transparent !important; box-shadow:none !important; color:var(--text) !important; }
  .mega-dropdown { position:static !important; transform:none !important; width:100% !important; max-width:none !important; background:#fff !important; border-radius:0 !important; box-shadow:none !important; border:0 !important; opacity:1 !important; visibility:visible !important; pointer-events:auto !important; overflow:visible !important; transition:none !important; display:none !important; }
  .mega-trigger.is-open .mega-dropdown { display:block !important; }
  .mega-trigger.is-open .trigger-label { display:none !important; }
@@ -112,12 +107,34 @@ body { font-family: var(--font-family); background: var(--bg); color: var(--text
  .logo-text-group { display:none !important; }
  .cta-button { padding:10px 11px !important; }
 }
+
+/* Mobile menu safety */
+@media (max-width:992px) {
+ .nav-wrapper { height:80px !important; }
+ .nav-container { min-width:0 !important; }
+ .main-nav { visibility:hidden !important; pointer-events:none !important; right:-100% !important; }
+ .main-nav.open { visibility:visible !important; pointer-events:auto !important; right:0 !important; }
+ .main-nav.is-submenu-open .mega-trigger:not(.is-open) { display:none !important; }
+ .mega-trigger.is-open { display:block !important; }
+ .mega-trigger.is-open .mega-dropdown { display:block !important; }
+ .mega-dropdown .mega-inner { width:100% !important; min-width:0 !important; }
+ .mega-dropdown .grid-2col, .mega-dropdown .grid-3col { width:100% !important; min-width:0 !important; }
+ .mega-dropdown .drop-link { width:100% !important; min-height:52px !important; overflow-wrap:anywhere; }
+ .mega-dropdown .visual-card { max-width:calc(100% - 32px) !important; }
+ body.header-menu-open { overflow:hidden !important; }
+}
+@media (max-width:600px) {
+ .main-nav { width:min(340px,92vw) !important; }
+ .mega-dropdown .mega-inner { padding:0 !important; }
+ .mobile-back-btn { position:sticky; top:0; z-index:2; }
+}
+
 </style>
 <!-- ─── HEADER HTML ─── -->
 <header class="nav-wrapper" style="font-family:'Inter',sans-serif; position:fixed; top:0; left:0; width:100%; height:80px; background:rgba(255,255,255,0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid #e8ecf1; z-index:10000; display:flex; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.04); transition:all 0.35s cubic-bezier(0.4,0,0.2,1);">
 <div class="nav-container" style="max-width:1400px; margin:0 auto; width:100%; display:flex; justify-content:space-between; align-items:center; padding:0 28px; gap:20px;">
 <!-- Bolder & Larger Logo -->
-<a href="https://www.seoexpertinpakistan.com" class="logo-link" style="text-decoration:none; display:flex; align-items:center; gap:12px; flex-shrink:0; position:relative; z-index:2;">
+<a href="/" class="logo-link" style="text-decoration:none; display:flex; align-items:center; gap:12px; flex-shrink:0; position:relative; z-index:2;">
 <svg width="52" height="52" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
 <path d="M 310 135 A 135 135 0 1 0 335 335" stroke="#0B6B6D" stroke-width="34" stroke-linecap="round"/>
 <line x1="335" y1="335" x2="415" y2="415" stroke="#0B6B6D" stroke-width="42" stroke-linecap="round"/>
@@ -152,33 +169,33 @@ Services
 <div class="mega-inner" style="padding:40px 36px 36px; display:grid; grid-template-columns:1fr 1fr 0.9fr; gap:40px;">
 <div>
 <div class="drop-category-label" style="font-size:10.5px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#0d7377; padding:8px 15px 4px; opacity:0.7;">🔍 Core SEO Services</div>
-<a href="https://seoexpertinpakistan.com/services/on-page-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/on-page-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> On-Page SEO
 </a>
-<a href="https://seoexpertinpakistan.com/services/off-page-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/off-page-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M13.8 10.2a4 4 0 00-5.6 0l-4 4a4 4 0 105.6 5.6l1.1-1.1m-.7-4.9a4 4 0 005.6 0l4-4a4 4 0 00-5.6-5.6l-1.1 1.1"></path></svg> Off-Page SEO
 </a>
-<a href="https://seoexpertinpakistan.com/services/technical-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/technical-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg> Technical SEO
 </a>
 <div class="drop-category-label" style="font-size:10.5px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#0d7377; padding:8px 15px 4px; margin-top:14px; opacity:0.7;">📝 Content &amp; Research</div>
-<a href="https://seoexpertinpakistan.com/services/seo-content-writing-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/seo-content-writing-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.4-9.4a2 2 0 112.8 2.8L11.8 15H9v-2.8l8.6-8.6z"></path></svg> SEO Content Writing
 </a>
-<a href="https://seoexpertinpakistan.com/services/keyword-research-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/keyword-research-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.7 5.7L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.6a1 1 0 01.3-.7l6-6A6 6 0 1121 9z"></path></svg> Keyword Research
 </a>
 </div>
 <div>
 <div class="drop-category-label" style="font-size:10.5px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#0d7377; padding:8px 15px 4px; opacity:0.7;">📍 Local SEO</div>
-<a href="https://seoexpertinpakistan.com/services/gmb-optimization-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/gmb-optimization-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M17.6 16.7L13.4 20.9a2 2 0 01-2.8 0l-4.2-4.2a8 8 0 1111.3 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg> GMB Optimization
 </a>
 <div class="drop-category-label" style="font-size:10.5px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#0d7377; padding:8px 15px 4px; margin-top:14px; opacity:0.7;">⚡ Advanced SEO Services</div>
-<a href="https://seoexpertinpakistan.com/services/national-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/national-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.3 2.3c-.6.6-.2 1.7.7 1.7H17"></path></svg> National SEO
 </a>
-<a href="https://seoexpertinpakistan.com/services/international-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
+<a href="/services/international-seo-services/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;">
 <svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0; transition:all 0.2s cubic-bezier(0.4,0,0.2,1);"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> International SEO
 </a>
 </div>
@@ -188,7 +205,7 @@ Services
 </div>
 <h3 style="margin:0 0 8px; font-weight:800; letter-spacing:-0.3px; font-size:22px; color:#fff;">Boost Your Traffic</h3>
 <p style="font-size:13px; opacity:0.8; margin:0 0 14px; color:rgba(255,255,255,0.85); line-height:1.5;">Rank #1 in Google Pakistan with our proven SEO strategies &amp; data‑driven approach.</p>
-<a href="https://seoexpertinpakistan.com/contact-us/" class="card-cta" style="display:inline-block; background:#d4a843; color:#fff; padding:11px 22px; border-radius:50px; text-decoration:none; font-weight:700; font-size:13px; letter-spacing:0.3px; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 8px 22px rgba(212,168,67,0.35); margin-top:4px;">✨ Get Free Audit</a>
+<a href="/contact-us/" class="card-cta" style="display:inline-block; background:#d4a843; color:#fff; padding:11px 22px; border-radius:50px; text-decoration:none; font-weight:700; font-size:13px; letter-spacing:0.3px; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); box-shadow:0 8px 22px rgba(212,168,67,0.35); margin-top:4px;">✨ Get Free Audit</a>
 </div>
 </div>
 </div>
@@ -199,12 +216,12 @@ Services
 <div class="mega-dropdown" style="position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(12px); width:100vw; max-width:1100px; background:#ffffff; border-radius:0 0 24px 24px; box-shadow:0 40px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04); opacity:0; visibility:hidden; pointer-events:none; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); overflow:hidden; border-bottom:4px solid #0d7377; z-index:9999;">
 <div class="mega-inner" style="padding:36px 30px; display:grid; grid-template-columns:1.5fr 1fr; gap:40px;">
 <div class="grid-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-<a href="https://seoexpertinpakistan.com/blogs/on-page-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> On page</a>
-<a href="https://seoexpertinpakistan.com/blogs/off-page-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M13.8 10.2a4 4 0 00-5.6 0l-4 4a4 4 0 105.6 5.6l1.1-1.1m-.7-4.9a4 4 0 005.6 0l4-4a4 4 0 00-5.6-5.6l-1.1 1.1"></path></svg> Off page</a>
-<a href="https://seoexpertinpakistan.com/blogs/local-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M17.6 16.7L13.4 20.9a2 2 0 01-2.8 0l-4.2-4.2a8 8 0 1111.3 0z"></path></svg> Local</a>
-<a href="https://seoexpertinpakistan.com/blogs/international-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a13 13 0 014 9 13 13 0 01-4 9 13 13 0 01-4-9 13 13 0 014-9zM3 12h18"></path></svg> International</a>
-<a href="https://seoexpertinpakistan.com/blogs/technical-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg> Technical</a>
-<a href="https://seoexpertinpakistan.com/blogs/others/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M4 6h16M4 12h16M4 18h7"></path></svg> Others</a>
+<a href="/blogs/on-page-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg> On page</a>
+<a href="/blogs/off-page-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M13.8 10.2a4 4 0 00-5.6 0l-4 4a4 4 0 105.6 5.6l1.1-1.1m-.7-4.9a4 4 0 005.6 0l4-4a4 4 0 00-5.6-5.6l-1.1 1.1"></path></svg> Off page</a>
+<a href="/blogs/local-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M17.6 16.7L13.4 20.9a2 2 0 01-2.8 0l-4.2-4.2a8 8 0 1111.3 0z"></path></svg> Local</a>
+<a href="/blogs/international-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><circle cx="12" cy="12" r="9"></circle><path d="M12 3a13 13 0 014 9 13 13 0 01-4 9 13 13 0 01-4-9 13 13 0 014-9zM3 12h18"></path></svg> International</a>
+<a href="/blogs/technical-seo/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg> Technical</a>
+<a href="/blogs/others/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M4 6h16M4 12h16M4 18h7"></path></svg> Others</a>
 </div>
 <div style="text-align:left; border-left:1px solid #e8ecf1; padding-left:40px;">
 <div style="font-size:10.5px; text-transform:uppercase; letter-spacing:2px; font-weight:700; color:#0d7377; padding:0 15px 4px; opacity:0.7; margin-bottom:8px;">Latest post</div>
@@ -212,7 +229,7 @@ Services
 <polyline points="0,45 20,35 40,38 60,20 80,25 100,8 120,5" fill="none" stroke="#d4a843" stroke-width="2.5"></polyline>
 </svg>
 <h4 style="margin:0 0 8px; font-weight:800; letter-spacing:-0.3px; font-size:17px; color:#1a1a2e;">What Google's latest update means for Pakistani sites</h4>
-<a href="https://seoexpertinpakistan.com/contact-us/" style="font-size:13px; color:#0d7377; font-weight:600; text-decoration:none; margin-top:8px; display:inline-block;">Read the post →</a>
+<a href="/contact-us/" style="font-size:13px; color:#0d7377; font-weight:600; text-decoration:none; margin-top:8px; display:inline-block;">Read the post →</a>
 </div>
 </div>
 </div>
@@ -223,11 +240,11 @@ Services
 <div class="mega-dropdown" style="position:fixed; top:80px; left:50%; transform:translateX(-50%) translateY(12px); width:100vw; max-width:1000px; background:#ffffff; border-radius:0 0 24px 24px; box-shadow:0 40px 80px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.04); opacity:0; visibility:hidden; pointer-events:none; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); overflow:hidden; border-bottom:4px solid #0d7377; z-index:9999;">
 <div class="mega-inner" style="padding:36px 30px; display:grid; grid-template-columns:1.5fr 1fr; gap:40px;">
 <div class="grid-2col" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-<a href="https://seoexpertinpakistan.com/about-us/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> About us</a>
-<a href="https://seoexpertinpakistan.com/contact-us/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M3 8l7.9 5.3c.6.4 1.5.4 2.1 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> Contact us</a>
-<a href="https://seoexpertinpakistan.com/privacy-policy/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M9 12l2 2 4-4m5 .5c0 4.8-3.7 8.9-8 9.5-4.3-.6-8-4.7-8-9.5V6l8-3 8 3v6.5z"></path></svg> Privacy policy</a>
-<a href="https://seoexpertinpakistan.com/terms-and-conditions/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6l5.4 5.4V19a2 2 0 01-2 2z"></path></svg> Terms and conditions</a>
-<a href="https://seoexpertinpakistan.com/author-profile/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> Author profile</a>
+<a href="/about-us/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg> About us</a>
+<a href="/contact-us/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M3 8l7.9 5.3c.6.4 1.5.4 2.1 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg> Contact us</a>
+<a href="/privacy-policy/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M9 12l2 2 4-4m5 .5c0 4.8-3.7 8.9-8 9.5-4.3-.6-8-4.7-8-9.5V6l8-3 8 3v6.5z"></path></svg> Privacy policy</a>
+<a href="/terms-and-conditions/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.6l5.4 5.4V19a2 2 0 01-2 2z"></path></svg> Terms and conditions</a>
+<a href="/author-profile/" class="drop-link" style="display:flex; align-items:center; gap:13px; text-decoration:none; color:#4a4a6a; font-size:14px; font-weight:500; padding:11px 15px; border-radius:8px; transition:all 0.2s cubic-bezier(0.4,0,0.2,1); letter-spacing:0.15px; position:relative;"><svg viewBox="0 0 24 24" style="width:19px; height:19px; stroke:#0d7377; stroke-width:1.8; fill:none; flex-shrink:0;"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg> Author profile</a>
 </div>
 <div class="visual-card visual-card-teal" style="border-radius:20px; padding:32px 24px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; overflow:hidden; transition:all 0.35s cubic-bezier(0.4,0,0.2,1); background:linear-gradient(145deg, #0d7377 0%, #095a5e 40%, #0a3d40 100%); color:#fff; box-shadow:0 15px 40px rgba(13,115,119,0.3);">
 <div class="visual-card-icon-wrap" style="width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:16px; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); background:rgba(255,255,255,0.12); box-shadow:0 0 30px rgba(212,168,67,0.3);">
@@ -241,7 +258,7 @@ Services
 </div>
 </nav>
 <!-- CTA -->
-<a href="https://seoexpertinpakistan.com/contact-us/" class="cta-button" style="background:linear-gradient(135deg, #0d7377, #095c60); color:#fff; text-decoration:none; padding:15px 28px; border-radius:50px; font-weight:800; font-size:13.5px; letter-spacing:0.4px; box-shadow:0 10px 28px rgba(13,115,119,0.3); transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; flex-shrink:0; position:relative; overflow:hidden; display:flex; align-items:center; gap:8px;">
+<a href="/contact-us/" class="cta-button" style="background:linear-gradient(135deg, #0d7377, #095c60); color:#fff; text-decoration:none; padding:15px 28px; border-radius:50px; font-weight:800; font-size:13.5px; letter-spacing:0.4px; box-shadow:0 10px 28px rgba(13,115,119,0.3); transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1); white-space:nowrap; flex-shrink:0; position:relative; overflow:hidden; display:flex; align-items:center; gap:8px;">
 <span class="cta-dot"></span> Get free proposal
 <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:#fff; stroke-width:2.5; fill:none; transition:transform 0.4s cubic-bezier(0.34,1.56,0.64,1);"><path d="M5 12h14m-7-7l7 7-7 7"></path></svg>
 </a>
@@ -260,11 +277,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!navContainer || !mainNav || !triggers.length) return;
 
     const mobileQuery = window.matchMedia('(max-width: 992px)');
-    const closeAll = () => {
-        triggers.forEach(t => t.classList.remove('is-open'));
-        mainNav.classList.remove('is-submenu-open');
-    };
-
     const hamburger = document.createElement('button');
     hamburger.className = 'hamburger-btn';
     hamburger.type = 'button';
@@ -273,41 +285,52 @@ document.addEventListener('DOMContentLoaded', function () {
     hamburger.innerHTML = '<span></span><span></span><span></span>';
     navContainer.appendChild(hamburger);
 
-    hamburger.addEventListener('click', function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const opening = !mainNav.classList.contains('open');
-        mainNav.classList.toggle('open', opening);
-        hamburger.classList.toggle('active', opening);
-        hamburger.setAttribute('aria-expanded', String(opening));
-        closeAll();
+    const closeSubmenus = () => {
+        triggers.forEach(t => t.classList.remove('is-open'));
+        mainNav.classList.remove('is-submenu-open');
+    };
+    const closeMenu = () => {
+        closeSubmenus();
+        mainNav.classList.remove('open');
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.classList.remove('header-menu-open');
+    };
+    const openMenu = () => {
+        mainNav.classList.add('open');
+        hamburger.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('header-menu-open');
+    };
+
+    hamburger.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        if (mainNav.classList.contains('open')) closeMenu(); else openMenu();
     });
 
     triggers.forEach(trigger => {
         const label = trigger.querySelector('.trigger-label');
         const dropdown = trigger.querySelector('.mega-dropdown');
+        const inner = dropdown ? dropdown.querySelector('.mega-inner') : null;
         if (!label || !dropdown) return;
 
-        const inner = dropdown.querySelector('.mega-inner');
         const backBtn = document.createElement('button');
         backBtn.type = 'button';
         backBtn.className = 'mobile-back-btn';
         backBtn.innerHTML = '← Back to Main Menu';
         if (inner) inner.insertBefore(backBtn, inner.firstChild);
 
-        label.addEventListener('click', function (e) {
+        label.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
             if (!mobileQuery.matches) {
-                e.preventDefault();
-                e.stopPropagation();
                 const wasOpen = trigger.classList.contains('is-open');
-                closeAll();
+                closeSubmenus();
                 if (!wasOpen) trigger.classList.add('is-open');
                 return;
             }
-            e.preventDefault();
-            e.stopPropagation();
+            if (!mainNav.classList.contains('open')) openMenu();
             const wasOpen = trigger.classList.contains('is-open');
-            closeAll();
+            closeSubmenus();
             if (!wasOpen) {
                 trigger.classList.add('is-open');
                 mainNav.classList.add('is-submenu-open');
@@ -315,47 +338,28 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
-        backBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-            closeAll();
+        backBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            closeSubmenus(); mainNav.scrollTop = 0;
         });
     });
 
     mainNav.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', function () {
-            if (mobileQuery.matches) {
-                closeAll();
-                mainNav.classList.remove('open');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            }
+        link.addEventListener('click', function() {
+            if (mobileQuery.matches) closeMenu(); else closeSubmenus();
         });
     });
 
-    document.addEventListener('click', function (e) {
-        if (!mainNav.contains(e.target) && !hamburger.contains(e.target)) {
-            if (mobileQuery.matches) {
-                mainNav.classList.remove('open');
-                hamburger.classList.remove('active');
-                hamburger.setAttribute('aria-expanded', 'false');
-            }
-            closeAll();
-        }
+    document.addEventListener('click', function(e) {
+        if (!mainNav.contains(e.target) && !hamburger.contains(e.target)) closeMenu();
     });
-
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeMenu();
+    });
     const syncHeaderHeight = () => {
-        if (spacer && header) spacer.style.height = header.offsetHeight + 'px';
+        if (header && spacer) spacer.style.height = header.offsetHeight + 'px';
     };
-    window.addEventListener('resize', function () {
-        closeAll();
-        if (!mobileQuery.matches) {
-            mainNav.classList.remove('open');
-            hamburger.classList.remove('active');
-            hamburger.setAttribute('aria-expanded', 'false');
-        }
-        syncHeaderHeight();
-    });
+    window.addEventListener('resize', () => { closeMenu(); syncHeaderHeight(); });
     syncHeaderHeight();
 });
 </script>
