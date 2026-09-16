@@ -2,105 +2,63 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Header & Footer Test</title>
-
-    <!-- Common CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-</head>
-
-<body>
-
-    <!-- Header will be loaded here -->
-    <div id="site-header"></div>
-
-
-    <!-- Test Content -->
-    <main style="padding-top: 120px; min-height: 600px;">
-
-        <div style="max-width: 1200px; margin: 0 auto; padding: 80px 24px;">
-
-            <h1>Header & Footer Test</h1>
-
-            <p style="margin-top: 20px;">
-                This page is only for testing the shared header and footer.
-            </p>
-
-            <p style="margin-top: 20px;">
-                Test the desktop navigation, mega menus, mobile menu,
-                buttons, links, and footer.
-            </p>
-
-        </div>
-
-    </main>
-
-
-    <!-- Footer will be loaded here -->
-    <div id="site-footer"></div>
-
-
-    <!-- =================================================
-         COMPONENT LOADER
-         ================================================= -->
+    <title>Head Component Test</title>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
 
             try {
 
-                /* Load Header */
-                const headerResponse = await fetch('/components/header.html');
+                const response = await fetch('/components/head.html');
 
-                if (!headerResponse.ok) {
-                    throw new Error('Header could not be loaded.');
+                if (!response.ok) {
+                    throw new Error(
+                        'Could not load /components/head.html — Status: ' +
+                        response.status
+                    );
                 }
 
-                const headerHTML = await headerResponse.text();
+                const html = await response.text();
 
-                document.getElementById('site-header').innerHTML = headerHTML;
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
 
+                Array.from(doc.head.children).forEach(function (element) {
 
-                /* Load Footer */
-                const footerResponse = await fetch('/components/footer.html');
+                    document.head.appendChild(
+                        element.cloneNode(true)
+                    );
 
-                if (!footerResponse.ok) {
-                    throw new Error('Footer could not be loaded.');
-                }
+                });
 
-                const footerHTML = await footerResponse.text();
-
-                document.getElementById('site-footer').innerHTML = footerHTML;
-
-
-                /* Load Common JavaScript AFTER components exist */
-                const script = document.createElement('script');
-
-                script.src = '/js/script.js';
-
-                script.onload = function () {
-                    console.log('Common script loaded successfully.');
-                };
-
-                script.onerror = function () {
-                    console.error('Could not load /js/script.js');
-                };
-
-                document.body.appendChild(script);
-
-
-                console.log('Header and footer loaded successfully.');
+                console.log('head.html injected successfully.');
 
             } catch (error) {
 
-                console.error('Component loading error:', error);
+                console.error('Head component error:', error);
 
             }
 
         });
     </script>
+
+</head>
+
+<body>
+
+    <main style="padding: 100px 24px;">
+
+        <h1>Head Component Test</h1>
+
+        <p>
+            This page is testing only the shared head component.
+        </p>
+
+    </main>
 
 </body>
 
