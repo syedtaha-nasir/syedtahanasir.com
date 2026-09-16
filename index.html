@@ -3,43 +3,132 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Head Component Test</title>
+    <title>Shared Components Test</title>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function () {
 
             try {
 
-                const response = await fetch('/components/head.html');
+                /* ==========================================
+                   1. LOAD HEAD COMPONENT
+                   ========================================== */
 
-                if (!response.ok) {
+                const headResponse = await fetch('/components/head.html');
+
+                if (!headResponse.ok) {
                     throw new Error(
                         'Could not load /components/head.html — Status: ' +
-                        response.status
+                        headResponse.status
                     );
                 }
 
-                const html = await response.text();
+                const headHTML = await headResponse.text();
 
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
+                const headParser = new DOMParser();
+                const headDocument =
+                    headParser.parseFromString(headHTML, 'text/html');
 
-                Array.from(doc.head.children).forEach(function (element) {
+                /*
+                 * Add head elements.
+                 *
+                 * Scripts are added after header/footer so the
+                 * common JavaScript can initialize those components.
+                 */
 
-                    document.head.appendChild(
-                        element.cloneNode(true)
-                    );
+                const headScripts = [];
+
+                Array.from(headDocument.head.children).forEach(function (element) {
+
+                    if (element.tagName.toLowerCase() === 'script') {
+
+                        headScripts.push(element);
+
+                    } else {
+
+                        document.head.appendChild(
+                            element.cloneNode(true)
+                        );
+
+                    }
 
                 });
 
                 console.log('head.html injected successfully.');
 
+
+                /* ==========================================
+                   2. LOAD HEADER COMPONENT
+                   ========================================== */
+
+                const headerResponse =
+                    await fetch('/components/header.html');
+
+                if (!headerResponse.ok) {
+                    throw new Error(
+                        'Could not load /components/header.html — Status: ' +
+                        headerResponse.status
+                    );
+                }
+
+                const headerHTML = await headerResponse.text();
+
+                document.getElementById('site-header').innerHTML =
+                    headerHTML;
+
+                console.log('header.html injected successfully.');
+
+
+                /* ==========================================
+                   3. LOAD FOOTER COMPONENT
+                   ========================================== */
+
+                const footerResponse =
+                    await fetch('/components/footer.html');
+
+                if (!footerResponse.ok) {
+                    throw new Error(
+                        'Could not load /components/footer.html — Status: ' +
+                        footerResponse.status
+                    );
+                }
+
+                const footerHTML = await footerResponse.text();
+
+                document.getElementById('site-footer').innerHTML =
+                    footerHTML;
+
+                console.log('footer.html injected successfully.');
+
+
+                /* ==========================================
+                   4. LOAD HEAD SCRIPTS
+                   ========================================== */
+
+                headScripts.forEach(function (originalScript) {
+
+                    const script = document.createElement('script');
+
+                    Array.from(originalScript.attributes).forEach(function (attribute) {
+
+                        script.setAttribute(
+                            attribute.name,
+                            attribute.value
+                        );
+
+                    });
+
+                    script.textContent = originalScript.textContent;
+
+                    document.head.appendChild(script);
+
+                });
+
+                console.log('Shared head scripts loaded successfully.');
+
             } catch (error) {
 
-                console.error('Head component error:', error);
+                console.error('Component loading error:', error);
 
             }
 
@@ -48,17 +137,48 @@
 
 </head>
 
+
 <body>
 
-    <main style="padding: 100px 24px;">
+    <!-- Shared Header -->
+    <div id="site-header"></div>
 
-        <h1>Head Component Test</h1>
 
-        <p>
-            This page is testing only the shared head component.
-        </p>
+    <!-- Test Content -->
+    <main>
+
+        <section style="
+            min-height: 600px;
+            padding: 160px 24px 100px;
+        ">
+
+            <div style="
+                max-width: 1200px;
+                margin: 0 auto;
+            ">
+
+                <h1>Shared Components Test</h1>
+
+                <p>
+                    This page is testing the shared head,
+                    header, and footer components.
+                </p>
+
+                <p>
+                    Check desktop navigation, mega menus,
+                    mobile navigation, buttons, links,
+                    typography, spacing, and footer behavior.
+                </p>
+
+            </div>
+
+        </section>
 
     </main>
+
+
+    <!-- Shared Footer -->
+    <div id="site-footer"></div>
 
 </body>
 
